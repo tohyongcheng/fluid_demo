@@ -28,7 +28,6 @@
 /* Begin PBXFileReference section */
 		19E73D0B1AD3CD2C00BA2EE7 /* fluid_demo */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = fluid_demo; sourceTree = BUILT_PRODUCTS_DIR; };
 		19E73D0E1AD3CD2C00BA2EE7 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		19E73D151AD3CD3800BA2EE7 /* demo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = demo.c; sourceTree = "<group>"; };
 		19E73D161AD3CD3800BA2EE7 /* solver.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = solver.c; sourceTree = "<group>"; };
 		19E73D191AD3CD5500BA2EE7 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
 		19E73D1B1AD3CD5900BA2EE7 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
@@ -68,7 +67,6 @@
 		19E73D0D1AD3CD2C00BA2EE7 /* fluid_demo */ = {
 			isa = PBXGroup;
 			children = (
-				19E73D151AD3CD3800BA2EE7 /* demo.c */,
 				19E73D161AD3CD3800BA2EE7 /* solver.c */,
 				19E73D0E1AD3CD2C00BA2EE7 /* main.cpp */,
 			);

@@ -60,6 +60,25 @@ void advect ( int N, int b, float * d, float * d0, float * u, float * v, float d
 	set_bnd ( N, b, d );
 }
 
+void buoyancy (int N, float* fBuoy, float* temp0)
+{
+    int i,j;
+    float tamb = 0.0;
+    float a = 0.000625f;
+    float b = 0.025f;
+    
+    FOR_EACH_CELL
+        tamb += fBuoy[IX(i,j)];
+    END_FOR
+    
+    // get average temperature
+    
+    tamb /=(N*N);
+    FOR_EACH_CELL
+        fBuoy[IX(i,j)] = a * temp0[IX(i,j)] - b * (temp0[IX(i,j)] - tamb);
+    END_FOR
+}
+
 void project ( int N, float * u, float * v, float * p, float * div )
 {
 	int i, j;
@@ -86,9 +105,21 @@ void dens_step ( int N, float * x, float * x0, float * u, float * v, float diff,
 	SWAP ( x0, x ); advect ( N, 0, x, x0, u, v, dt );
 }
 
-void vel_step ( int N, float * u, float * v, float * u0, float * v0, float visc, float dt )
+void temp_step ( int N, float * x, float * x0, float * u, float * v, float diff, float dt )
 {
-	add_source ( N, u, u0, dt ); add_source ( N, v, v0, dt );
+    add_source ( N, x, x0, dt );
+    SWAP ( x0, x ); diffuse ( N, 0, x, x0, diff, dt );
+    SWAP ( x0, x ); advect ( N, 0, x, x0, u, v, dt );
+}
+
+void vel_step ( int N, float * u, float * v, float * temp, float * u0, float * v0, float * temp0, float visc, float dt )
+{
+    add_source ( N, u, u0, dt ); add_source ( N, v, v0, dt );
+    
+    //buoyancy
+    buoyancy(N, v0, temp0); add_source(N, v, v0, dt);
+    
+    
 	SWAP ( u0, u ); diffuse ( N, 1, u, u0, visc, dt );
 	SWAP ( v0, v ); diffuse ( N, 2, v, v0, visc, dt );
 	project ( N, u, v, u0, v0 );

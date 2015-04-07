@@ -26,16 +26,19 @@
 
 extern void dens_step ( int N, float * x, float * x0, float * u, float * v, float diff, float dt );
 extern void vel_step ( int N, float * u, float * v, float * u0, float * v0, float visc, float dt );
+extern void temp_step ( int N, float * u, float * v, float * u0, float * v0, float visc, float dt );
 
 /* global variables */
 
 static int N;
 static float dt, diff, visc;
-static float force, source;
+static float force, source, temp_source;
 static int dvel;
 
 static float * u, * v, * u_prev, * v_prev;
 static float * dens, * dens_prev;
+static float * temp, * temp_prev;
+static float * buo;
 
 static int win_id;
 static int win_x, win_y;
@@ -58,6 +61,8 @@ static void free_data ( void )
     if ( v_prev ) free ( v_prev );
     if ( dens ) free ( dens );
     if ( dens_prev ) free ( dens_prev );
+    if ( temp ) free (temp);
+    if ( temp_prev ) free ( temp_prev );
 }
 
 static void clear_data ( void )
@@ -65,7 +70,7 @@ static void clear_data ( void )
     int i, size=(N+2)*(N+2);
     
     for ( i=0 ; i<size ; i++ ) {
-        u[i] = v[i] = u_prev[i] = v_prev[i] = dens[i] = dens_prev[i] = 0.0f;
+        u[i] = v[i] = u_prev[i] = v_prev[i] = dens[i] = dens_prev[i] = temp[i] = temp_prev[i] = 0.0f;
     }
 }
 
@@ -79,8 +84,11 @@ static int allocate_data ( void )
     v_prev		= (float *) malloc ( size*sizeof(float) );
     dens		= (float *) malloc ( size*sizeof(float) );
     dens_prev	= (float *) malloc ( size*sizeof(float) );
+    temp        = (float *) malloc ( size*sizeof(float) );
+    temp_prev   = (float *) malloc ( size*sizeof(float) );
+    buo   = (float *) malloc ( size*sizeof(float) );
     
-    if ( !u || !v || !u_prev || !v_prev || !dens || !dens_prev ) {
+    if ( !u || !v || !u_prev || !v_prev || !dens || !dens_prev || !temp || !temp_prev ) {
         fprintf ( stderr, "cannot allocate data\n" );
         return ( 0 );
     }
@@ -164,13 +172,42 @@ static void draw_density ( void )
     glEnd ();
 }
 
+static void draw_temperature (void)
+{
+    int i, j;
+    float x, y, h, d00, d01, d10, d11;
+    
+    h = 1.0f/N;
+    
+    glBegin ( GL_QUADS );
+    
+    for ( i=0 ; i<=N ; i++ ) {
+        x = (i-0.5f)*h;
+        for ( j=0 ; j<=N ; j++ ) {
+            y = (j-0.5f)*h;
+            
+            d00 = temp[IX(i,j)];
+            d01 = temp[IX(i,j+1)];
+            d10 = temp[IX(i+1,j)];
+            d11 = temp[IX(i+1,j+1)];
+            
+            glColor3f ( d00, d00, d00 ); glVertex2f ( x, y );
+            glColor3f ( d10, d10, d10 ); glVertex2f ( x+h, y );
+            glColor3f ( d11, d11, d11 ); glVertex2f ( x+h, y+h );
+            glColor3f ( d01, d01, d01 ); glVertex2f ( x, y+h );
+        }
+    }
+    
+    glEnd ();
+}
+
 /*
  ----------------------------------------------------------------------
  relates mouse movements to forces sources
  ----------------------------------------------------------------------
  */
 
-static void get_from_UI ( float * d, float * u, float * v )
+static void get_from_UI ( float * d, float * u, float * v, float *t )
 {
     int i, j, size = (N+2)*(N+2);
     
@@ -192,6 +229,7 @@ static void get_from_UI ( float * d, float * u, float * v )
     
     if ( mouse_down[2] ) {
         d[IX(i,j)] = source;
+        t[IX(i,j)] = temp_source;
     }
     
     omx = mx;
@@ -253,9 +291,10 @@ static void reshape_func ( int width, int height )
 
 static void idle_func ( void )
 {
-    get_from_UI ( dens_prev, u_prev, v_prev );
-    vel_step ( N, u, v, u_prev, v_prev, visc, dt );
+    get_from_UI ( dens_prev, u_prev, v_prev, temp_prev );
+    vel_step ( N, u, v, temp, u_prev, v_prev, temp_prev, visc, dt);
     dens_step ( N, dens, dens_prev, u, v, diff, dt );
+    temp_step(N, temp, temp_prev, u, v, diff, dt);
     
     glutSetWindow ( win_id );
     glutPostRedisplay ();
@@ -328,10 +367,11 @@ int main ( int argc, char ** argv )
     if ( argc == 1 ) {
         N = 64;
         dt = 0.1f;
-        diff = 0.0f;
+        diff = 0.0001f;
         visc = 0.0f;
         force = 5.0f;
         source = 100.0f;
+        temp_source = 100.0f;
         fprintf ( stderr, "Using defaults : N=%d dt=%g diff=%g visc=%g force = %g source=%g\n",
                  N, dt, diff, visc, force, source );
     } else {
@@ -341,6 +381,7 @@ int main ( int argc, char ** argv )
         visc = atof(argv[4]);
         force = atof(argv[5]);
         source = atof(argv[6]);
+        temp_source = atof(argv[7]);
     }
     
     printf ( "\n\nHow to use this demo:\n\n" );
