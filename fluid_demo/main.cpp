@@ -34,9 +34,6 @@ static float source_alpha =  0.05; //for displaying density
 GLfloat trans[3];
 GLfloat rot[2];
 
-
-
-
 /*
  ----------------------------------------------------------------------
  free/clear/allocate simulation data
@@ -103,22 +100,48 @@ static int allocate_data ( void )
  ----------------------------------------------------------------------
  */
 
+static float* getColour(
+
 static void draw_axis( void ) {
     glLineWidth ( 1.0f );
     glBegin (GL_LINES);
     
-    glColor3f(1.0f, 0.0f, 0.0f);
-    glVertex3f (0.25f, 0.f, 0.25f);
-    glVertex3f (1.0f, 0.f, 0.25f);
+    glColor3f(1.0f, 1.0f, 1.0f);
+    glVertex3f (0.f, 0.f, 0.f);
+    glVertex3f (1.0f, 0.f, 0.f);
     
-    glColor3f(0.0f, 1.0f, 0.0f);
-    glVertex3f (0.25f, 0.f, 0.25f);
-    glVertex3f (0.25f, 1.0f, 0.25f);
+    glVertex3f (0.f, 0.f, 0.f);
+    glVertex3f (0.f, 1.0f, 0.f);
+
+    glVertex3f (0.f, 0.f, 0.f);
+    glVertex3f (0.f, 0.f, 1.0f);
     
-    glColor3f(0.0f, 0.0f, 1.0f);
-    glVertex3f (0.25f, 0.f, 0.25f);
-    glVertex3f (0.25f, 0.f, 1.0f);
+    glVertex3f (1.f, 1.f, 1.f);
+    glVertex3f (0.f, 1.f, 1.0f);
     
+    glVertex3f (1.f, 1.f, 1.f);
+    glVertex3f (1.f, 1.f, 0.0f);
+    
+    glVertex3f (1.f, 1.f, 1.f);
+    glVertex3f (1.f, 0.f, 1.0f);
+    
+    glVertex3f (1.f, 0.f, 1.f);
+    glVertex3f (0.f, 0.f, 1.0f);
+    
+    glVertex3f (1.f, 0.f, 1.f);
+    glVertex3f (1.f, 0.f, 0.0f);
+    
+    glVertex3f (0.f, 1.f, 1.f);
+    glVertex3f (0.f, 0.f, 1.f);
+
+    glVertex3f (0.f, 1.f, 1.f);
+    glVertex3f (0.f, 1.f, 0.f);
+
+    glVertex3f (1.f, 1.f, 0.f);
+    glVertex3f (1.f, 0.f, 0.f);
+    
+    glVertex3f (1.f, 1.f, 0.f);
+    glVertex3f (0.f, 1.f, 0.f);
     glEnd();
 }
 
@@ -241,35 +264,35 @@ static void draw_temperature (void)
                 
                 // draw density as a cube of quads (6 faces)
                 
-                glColor4f ( d111, 0, 100-d111, source_alpha ); glVertex3f ( x+h,y+h,z+h );
-                glColor4f ( d011, 0, 100-d011, source_alpha ); glVertex3f ( x, y+h, z+h);
-                glColor4f ( d001, 0, 100-d001, source_alpha ); glVertex3f ( x, y, z+h );
-                glColor4f ( d101, 0, 100-d101, source_alpha ); glVertex3f ( x+h, y, z+h );
+                glColor4f ( d111, 0, 22-d111, source_alpha ); glVertex3f ( x+h,y+h,z+h );
+                glColor4f ( d011, 0, 22-d011, source_alpha ); glVertex3f ( x, y+h, z+h);
+                glColor4f ( d001, 0, 22-d001, source_alpha ); glVertex3f ( x, y, z+h );
+                glColor4f ( d101, 0, 22-d101, source_alpha ); glVertex3f ( x+h, y, z+h );
                 
-                glColor4f ( d110, 0, 100-d110, source_alpha ); glVertex3f ( x+h, y+h, z );
-                glColor4f ( d111, 0, 100-d111, source_alpha ); glVertex3f ( x+h,y+h,z+h );
-                glColor4f ( d101, 0, 100-d101, source_alpha ); glVertex3f ( x+h, y, z+h );
-                glColor4f ( d100, 0, 100-d100, source_alpha ); glVertex3f ( x+h, y, z );
+                glColor4f ( d110, 0, 22-d110, source_alpha ); glVertex3f ( x+h, y+h, z );
+                glColor4f ( d111, 0, 22-d111, source_alpha ); glVertex3f ( x+h,y+h,z+h );
+                glColor4f ( d101, 0, 22-d101, source_alpha ); glVertex3f ( x+h, y, z+h );
+                glColor4f ( d100, 0, 22-d100, source_alpha ); glVertex3f ( x+h, y, z );
                 
-                glColor4f ( d010, 0, 100-d010, source_alpha ); glVertex3f ( x, y+h, z );
-                glColor4f ( d110, 0, 100-d110, source_alpha ); glVertex3f ( x+h, y+h, z );
-                glColor4f ( d100, 0, 100-d100, source_alpha ); glVertex3f ( x+h, y, z );
-                glColor4f ( d000, 0, 100-d000, source_alpha ); glVertex3f ( x, y, z );
+                glColor4f ( d010, 0, 22-d010, source_alpha ); glVertex3f ( x, y+h, z );
+                glColor4f ( d110, 0, 22-d110, source_alpha ); glVertex3f ( x+h, y+h, z );
+                glColor4f ( d100, 0, 22-d100, source_alpha ); glVertex3f ( x+h, y, z );
+                glColor4f ( d000, 0, 22-d000, source_alpha ); glVertex3f ( x, y, z );
                 
-                glColor4f ( d011, 0, 100-d011, source_alpha ); glVertex3f ( x, y+h, z+h);
-                glColor4f ( d010, 0, 100-d010, source_alpha ); glVertex3f ( x, y+h, z );
-                glColor4f ( d000, 0, 100-d000, source_alpha ); glVertex3f ( x, y, z );
-                glColor4f ( d001, 0, 100-d001, source_alpha ); glVertex3f ( x, y, z+h );
+                glColor4f ( d011, 0, 22-d011, source_alpha ); glVertex3f ( x, y+h, z+h);
+                glColor4f ( d010, 0, 22-d010, source_alpha ); glVertex3f ( x, y+h, z );
+                glColor4f ( d000, 0, 22-d000, source_alpha ); glVertex3f ( x, y, z );
+                glColor4f ( d001, 0, 22-d001, source_alpha ); glVertex3f ( x, y, z+h );
+            
+                glColor4f ( d100, 0, 22-d100, source_alpha ); glVertex3f ( x+h, y, z );
+                glColor4f ( d000, 0, 22-d000, source_alpha ); glVertex3f ( x, y, z );
+                glColor4f ( d001, 0, 22-d001, source_alpha ); glVertex3f ( x, y, z+h );
+                glColor4f ( d101, 0, 22-d101, source_alpha ); glVertex3f ( x+h, y, z+h );
                 
-                glColor4f ( d100, 0, 100-d100, source_alpha ); glVertex3f ( x+h, y, z );
-                glColor4f ( d000, 0, 100-d000, source_alpha ); glVertex3f ( x, y, z );
-                glColor4f ( d001, 0, 100-d001, source_alpha ); glVertex3f ( x, y, z+h );
-                glColor4f ( d101, 0, 100-d101, source_alpha ); glVertex3f ( x+h, y, z+h );
-                
-                glColor4f ( d110, 0, 100-d110, source_alpha ); glVertex3f ( x+h, y+h, z );
-                glColor4f ( d010, 0, 100-d010, source_alpha ); glVertex3f ( x, y+h, z );
-                glColor4f ( d011, 0, 100-d011, source_alpha ); glVertex3f ( x, y+h, z+h);
-                glColor4f ( d111, 0, 100-d111, source_alpha ); glVertex3f ( x+h, y+h, z+h );
+                glColor4f ( d110, 0, 22-d110, source_alpha ); glVertex3f ( x+h, y+h, z );
+                glColor4f ( d010, 0, 22-d010, source_alpha ); glVertex3f ( x, y+h, z );
+                glColor4f ( d011, 0, 22-d011, source_alpha ); glVertex3f ( x, y+h, z+h);
+                glColor4f ( d111, 0, 22-d111, source_alpha ); glVertex3f ( x+h, y+h, z+h );
             }
         }
     }
@@ -302,6 +325,7 @@ static void get_from_UI ( float * d, float * u, float * v, float *t )
     if ( mouse_down[0] ) {
         u[IX(i,j,k)] = force * (mx-omx);
         v[IX(i,j,k)] = force * (omy-my);
+        w[IX(i,j,k)] = force * (omy-my);
     }
     
     if ( mouse_down[2] ) {
@@ -378,9 +402,6 @@ static void reshape_func ( int width, int height )
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective(60.0, (float)width/height, 0.001, 100.0);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glTranslatef(0.0f, 0.0f, -2.5f);
 }
 
 static void idle_func ( void )
@@ -414,20 +435,22 @@ static void post_display ( void )
 static void display_func ( void )
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     glPushMatrix();
-
+    
+    glTranslatef(0.0f, 0.0f, -2.5f);
     glRotatef(rot[0], 1.0f, 0.0f, 0.0f);
     glRotatef(rot[1], 0.0f, 1.0f, 0.0f);
-    
+    glTranslatef(-0.5, -0.5, -0.5);
+    glPushMatrix();
     if ( dvel ) draw_temperature ();
     else		draw_density ();
-    
     if (dAxis) draw_axis();
+    glPopMatrix();
     
     glEnd();
-
     glPopMatrix();
+    
+    glEnd();
     glFlush();
     
     post_display();
@@ -512,11 +535,11 @@ int main ( int argc, char ** argv )
     if ( argc == 1 ) {
         N = 32;
         dt = 0.4f;
-        diff = 0.00001f;
+        diff = 0.0001f;
         visc = 0.0f;
         force = 0.0f;
         source = 100.0f;
-        temp_source = 50.0f;
+        temp_source = 35.0f;
         fprintf ( stderr, "Using defaults : N=%d dt=%g diff=%g visc=%g force = %g source=%g\n",
                  N, dt, diff, visc, force, source );
     } else {
